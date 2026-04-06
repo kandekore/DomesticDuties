@@ -30,7 +30,7 @@ export default function AdminLogin() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0d0d0d' }}>
-      <div style={{ width: 380, background: '#1a1a1a', borderRadius: 16, padding: 40, border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ width: '100%', maxWidth: 380, margin: '0 16px', background: '#1a1a1a', borderRadius: 16, padding: 'clamp(24px, 5vw, 40px)', border: '1px solid rgba(255,255,255,0.08)' }}>
         <img src="/assets/brand/logowhite300px.png" alt="Logo" style={{ height: 40, marginBottom: 32 }} />
         <h2 style={{ color: '#fff', marginBottom: 6, fontSize: '1.3rem' }}>Admin Login</h2>
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', marginBottom: 28 }}>Domestic Duties Commercial Ltd.</p>

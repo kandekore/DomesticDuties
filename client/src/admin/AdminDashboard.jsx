@@ -99,10 +99,11 @@ export default function AdminDashboard() {
   const token      = localStorage.getItem('dd_admin_token')
   const api        = useApi(token)
 
-  const [active,   setActive]   = useState('bookings')
-  const [settings, setSettings] = useState(null)
-  const [saving,   setSaving]   = useState(false)
-  const [saved,    setSaved]    = useState(false)
+  const [active,      setActive]      = useState('bookings')
+  const [settings,    setSettings]    = useState(null)
+  const [saving,      setSaving]      = useState(false)
+  const [saved,       setSaved]       = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (!token) { navigate('/admin/login'); return }
@@ -123,17 +124,33 @@ export default function AdminDashboard() {
 
   const sidebarW = 220
 
+  const handleNavClick = (id) => {
+    setActive(id)
+    setSidebarOpen(false)
+  }
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#0d0d0d', fontFamily: 'var(--font-body)' }}>
+      {/* Mobile top bar */}
+      <div className="admin-topbar" style={{ display: 'none', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: 56, background: '#111', borderBottom: '1px solid rgba(255,255,255,0.06)', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px' }}>
+        <img src="/assets/brand/logowhite300px.png" alt="Logo" style={{ height: 28 }} />
+        <button onClick={() => setSidebarOpen(o => !o)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', padding: 4 }} aria-label="Menu">
+          {sidebarOpen ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && <div className="admin-overlay" onClick={() => setSidebarOpen(false)} style={{ display: 'none', position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 299 }} />}
+
       {/* Sidebar */}
-      <aside style={{ width: sidebarW, flexShrink: 0, background: '#111', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, overflow: 'auto' }}>
+      <aside className="admin-sidebar" style={{ width: sidebarW, flexShrink: 0, background: '#111', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, overflow: 'auto', zIndex: 300, transform: 'translateX(0)', transition: 'transform 0.25s ease' }}>
         <div style={{ padding: '24px 20px 16px' }}>
           <img src="/assets/brand/logowhite300px.png" alt="Logo" style={{ height: 36, marginBottom: 4 }} />
           <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', marginTop: 6 }}>Admin Panel</p>
         </div>
         <nav style={{ flex: 1, padding: '8px 12px' }}>
           {NAV_ITEMS.map(n => (
-            <button key={n.id} onClick={() => setActive(n.id)}
+            <button key={n.id} onClick={() => handleNavClick(n.id)}
               style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, border: 'none', background: active === n.id ? 'rgba(0,119,204,0.25)' : 'none', color: active === n.id ? '#4db8ff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: active === n.id ? 700 : 400, marginBottom: 2, textAlign: 'left' }}>
               <span>{n.icon}</span> {n.label}
             </button>
@@ -147,7 +164,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main content */}
-      <main style={{ marginLeft: sidebarW, flex: 1, padding: '32px 32px 60px', overflowY: 'auto' }}>
+      <main className="admin-main" style={{ marginLeft: sidebarW, flex: 1, padding: '32px 32px 60px', overflowY: 'auto' }}>
         {/* ── Bookings ── */}
         {active === 'bookings' && <BookingsSection api={api} token={token} />}
         {/* ── Quotes ── */}
@@ -182,6 +199,18 @@ export default function AdminDashboard() {
           </div>
         )}
       </main>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .admin-topbar { display: flex !important; }
+          .admin-sidebar { transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'} !important; top: 0 !important; }
+          .admin-overlay { display: block !important; }
+          .admin-main { margin-left: 0 !important; padding: 16px 16px 60px !important; padding-top: 72px !important; }
+          .admin-main table { font-size: 0.78rem; }
+          .admin-main td, .admin-main th { padding: 8px 6px !important; }
+          .admin-bookings-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   )
 }
@@ -230,7 +259,7 @@ function BookingsSection({ api }) {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: detail ? '1fr 360px' : '1fr', gap: 20 }}>
+      <div className="admin-bookings-grid" style={{ display: 'grid', gridTemplateColumns: detail ? '1fr 360px' : '1fr', gap: 20 }}>
         {/* List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {bookings.length === 0 && <p style={{ color: 'rgba(255,255,255,0.4)', padding: 20 }}>No bookings found.</p>}
