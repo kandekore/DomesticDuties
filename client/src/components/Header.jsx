@@ -35,6 +35,7 @@ export default function Header() {
           <img
             src="/assets/brand/logowhite300px.png"
             alt="Domestic Duties Commercial Ltd."
+            className="header-logo"
             style={{ height: 48, width: 'auto', objectFit: 'contain' }}
           />
         </Link>
@@ -108,7 +109,8 @@ export default function Header() {
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .hamburger-btn { display: block !important; }
-          .header-cta { display: none !important; }
+          .header-logo { height: 36px !important; }
+          .header-cta { padding: 6px 12px !important; font-size: 0.75rem !important; }
         }
       `}</style>
     </header>

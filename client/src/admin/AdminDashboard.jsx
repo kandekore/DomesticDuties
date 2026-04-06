@@ -128,7 +128,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside style={{ width: sidebarW, flexShrink: 0, background: '#111', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, overflow: 'auto' }}>
         <div style={{ padding: '24px 20px 16px' }}>
-          <img src="/assets/brand/DDLogo[01]_220710_184744.jpg" alt="Logo" style={{ height: 36, filter: 'brightness(0) invert(1)', marginBottom: 4 }} />
+          <img src="/assets/brand/logowhite300px.png" alt="Logo" style={{ height: 36, marginBottom: 4 }} />
           <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', marginTop: 6 }}>Admin Panel</p>
         </div>
         <nav style={{ flex: 1, padding: '8px 12px' }}>
