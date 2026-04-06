@@ -1,11 +1,5 @@
 import { Link } from 'react-router-dom'
 
-const TEAM_IMAGES = [
-  '/assets/images/20250813_104723.jpg',
-  '/assets/images/20250813_104721.jpg',
-  '/assets/images/20250813_110619.jpg',
-  '/assets/images/20250813_103101.jpg',
-]
 
 export default function Overview() {
   return (
@@ -14,7 +8,7 @@ export default function Overview() {
 
       {/* Hero */}
       <section className="hero">
-        <img src="/assets/images/20250925_165036.jpg" alt="" className="hero-bg-img" />
+        <img src="/assets/images/libary.jpg" alt="" className="hero-bg-img" />
         <div className="container">
           <div className="hero-content">
             <h1>Expert Cleaners,<br />Exceptional Results</h1>
@@ -71,22 +65,6 @@ export default function Overview() {
         </div>
       </section>
 
-      {/* Photo grid */}
-      <section className="section-sm" style={{ background: '#fff' }}>
-        <div className="container">
-          <h2 style={{ textAlign: 'center', marginBottom: 32 }}>Our Work</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>
-            {TEAM_IMAGES.map((img, i) => (
-              <div key={i} style={{ aspectRatio: '1', overflow: 'hidden', borderRadius: 'var(--radius)' }}>
-                <img src={img} alt="Cleaning work" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
-                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.06)'}
-                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Areas */}
       <section className="section section-dark">

@@ -21,7 +21,8 @@ export async function getSlotsForDate(providerId, serviceId, date, duration, buf
   const [eh, em] = rule.endTime.split(':').map(Number)
   const startMins = sh * 60 + sm
   const endMins   = eh * 60 + em
-  const slotLen   = duration + bufferTime
+  // Fixed start times: morning (9:00, 9:30) and afternoon (12:00, 12:30)
+  const fixedStartTimes = [9 * 60, 9 * 60 + 30, 12 * 60, 12 * 60 + 30]
 
   // Get existing bookings for this provider on this date (non-cancelled)
   const existing = await Booking.find({
@@ -37,7 +38,8 @@ export async function getSlotsForDate(providerId, serviceId, date, duration, buf
   })
 
   const slots = []
-  for (let t = startMins; t + duration <= endMins; t += slotLen) {
+  for (const t of fixedStartTimes) {
+    if (t < startMins || t + duration > endMins) continue
     const slotEnd = t + duration
     const conflict = busyRanges.some(r => t < r.end && slotEnd > r.start)
     if (!conflict) {

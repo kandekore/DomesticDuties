@@ -6,7 +6,7 @@ const SERVICES = [
     icon: '🔥',
     title: 'Oven Cleaning',
     desc: 'Essential for restaurants, cafes and commercial kitchens. Our professional oven cleaning service ensures hygiene standards are met and kitchen safety is maintained. We clean every component — racks, doors, hob and hood.',
-    images: ['/assets/images/20250816_113051.jpg', '/assets/images/20250816_110337.jpg'],
+    images: ['/assets/images/ovenbefore.jpg', '/assets/images/ovenafter.jpg'],
     link: '/book/oven-cleaning',
     cta: 'Book Oven Cleaning',
     pricing: 'From £65 (single), £85 (double), £125 (Rangemaster)',
@@ -16,7 +16,7 @@ const SERVICES = [
     icon: '🧹',
     title: 'Carpet & Upholstery Cleaning',
     desc: 'Revitalise your soft furnishings and create a welcoming environment for clients and staff. Our specialist carpet and upholstery cleaning extends the life of your flooring and furniture while removing deep-seated dirt and allergens.',
-    images: ['/assets/images/20250807_113048.jpg', '/assets/images/20250807_113345.jpg'],
+    images: ['/assets/images/stairs.jpg', '/assets/images/sofa.jpg'],
     link: '/book/carpet-upholstery',
     cta: 'Book Carpet Clean',
     pricing: 'From £50 — enquire for sizing and sofa/chair options',
@@ -70,7 +70,7 @@ export default function OurServices() {
 
       {/* Hero */}
       <section className="hero" style={{ paddingTop: 40, paddingBottom: 60 }}>
-        <img src="/assets/images/20251023_094804.jpg" alt="" className="hero-bg-img" />
+        <img src="/assets/images/sofas.jpg" alt="" className="hero-bg-img" />
         <div className="container">
           <div className="hero-content">
             <h1>Expert Commercial<br />Cleaning Solutions</h1>
@@ -100,8 +100,13 @@ export default function OurServices() {
               </div>
               <div style={{ order: i % 2 === 0 ? 1 : 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {s.images.map((img, j) => (
-                  <div key={j} style={{ borderRadius: 'var(--radius)', overflow: 'hidden', aspectRatio: j === 0 ? '3/4' : '3/4', marginTop: j === 1 ? 32 : 0 }}>
-                    <img src={img} alt={s.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div key={j} style={{ borderRadius: 'var(--radius)', overflow: 'hidden', aspectRatio: '3/4', marginTop: j === 1 ? 32 : 0 }}>
+                    {s.id === 'oven' && (
+                      <div style={{ background: j === 0 ? '#e74c3c' : '#27ae60', color: '#fff', fontSize: '0.75rem', fontWeight: 700, textAlign: 'center', padding: '5px 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {j === 0 ? 'Before' : 'After'}
+                      </div>
+                    )}
+                    <img src={img} alt={s.id === 'oven' ? (j === 0 ? 'Before cleaning' : 'After cleaning') : s.title} style={{ width: '100%', height: '100%', objectFit: s.id === 'oven' ? 'contain' : 'cover', background: s.id === 'oven' ? '#f5f5f5' : undefined }} />
                   </div>
                 ))}
               </div>

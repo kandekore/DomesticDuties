@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Menu, X, Phone } from 'lucide-react'
 
 const NAV = [
-  { label: 'For Your Business', to: '/' },
+  { label: 'Home', to: '/' },
   { label: 'About Us',          to: '/overview' },
   { label: 'What We Offer',     to: '/our-services' },
   { label: 'Pricing',           to: '/pricing' },

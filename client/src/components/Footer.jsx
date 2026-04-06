@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Phone, Mail } from 'lucide-react'
 
 const NAV = [
-  { label: 'For Your Business', to: '/' },
+  { label: 'Home', to: '/' },
   { label: 'About Us',          to: '/overview' },
   { label: 'What We Offer',     to: '/our-services' },
   { label: 'Pricing',           to: '/pricing' },
