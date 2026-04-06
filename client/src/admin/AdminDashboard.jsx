@@ -77,6 +77,16 @@ const statusColour = s => ({ pending_deposit:'#856404', pending_confirmation:'#1
 const statusBg     = s => ({ pending_deposit:'#fff3cd', pending_confirmation:'#e8f4fd', confirmed:'#d4edda', cancelled:'#fde8e8', completed:'#e8f5e9' })[s] || '#f5f5f5'
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
+// ── Tip banner helper ─────────────────────────────────────────────────────────
+function Tip({ children }) {
+  return (
+    <div style={{ background: 'rgba(0,119,204,0.1)', border: '1px solid rgba(0,119,204,0.25)', borderRadius: 8, padding: '10px 14px', marginBottom: 16, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+      <span style={{ fontSize: '1rem', flexShrink: 0 }}>💡</span>
+      <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.82rem', lineHeight: 1.6, margin: 0 }}>{children}</p>
+    </div>
+  )
+}
+
 const NAV_ITEMS = [
   { id: 'bookings',      label: 'Bookings',        icon: '📅' },
   { id: 'quotes',        label: 'Quote Requests',  icon: '📋' },
@@ -91,6 +101,7 @@ const NAV_ITEMS = [
   { id: 'email',         label: 'Email Settings',  icon: '✉️' },
   { id: 'business',      label: 'Business Info',   icon: '🏢' },
   { id: 'hours',         label: 'Opening Hours',   icon: '🕑' },
+  { id: 'guide',         label: 'Help & Guide',    icon: '📖' },
 ]
 
 // ── MAIN ──────────────────────────────────────────────────────────────────────
@@ -177,6 +188,8 @@ export default function AdminDashboard() {
         {active === 'availability' && <AvailabilitySection api={api} />}
         {/* ── Blackouts ── */}
         {active === 'blackouts' && <BlackoutsSection api={api} />}
+        {/* ── Guide ── */}
+        {active === 'guide' && <GuideSection />}
 
         {/* ── Settings sections ── */}
         {['whatsapp','payment','whatsapp_api','google','email','business','hours'].includes(active) && settings && (
@@ -250,6 +263,7 @@ function BookingsSection({ api }) {
   return (
     <div>
       <h2 style={{ color: '#fff', marginBottom: 20, fontSize: '1.3rem' }}>Bookings</h2>
+      <Tip>Filter by "Pending Confirmation" to see bookings that need your attention. Bank transfer bookings auto-escalate after 24 hours if the deposit isn't confirmed.</Tip>
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {['', 'pending_deposit', 'pending_confirmation', 'confirmed', 'completed', 'cancelled'].map(s => (
           <button key={s} onClick={() => setFilter(s)}
@@ -353,6 +367,7 @@ function QuotesSection({ api }) {
   return (
     <div>
       <h2 style={{ color: '#fff', marginBottom: 20, fontSize: '1.3rem' }}>Commercial Quote Requests</h2>
+      <Tip>Quote requests come from the commercial quote form on the website. Try to respond within 24 hours. Mark as "Contacted" once you've reached out, then "Close" when done.</Tip>
       {quotes.length === 0 && <p style={{ color: 'rgba(255,255,255,0.4)' }}>No quote requests yet.</p>}
       {quotes.map(q => (
         <Card key={q._id} style={{ marginBottom: 12 }}>
@@ -412,6 +427,7 @@ function ServicesSection({ api }) {
         <h2 style={{ color: '#fff', fontSize: '1.3rem' }}>Services</h2>
         <button onClick={() => setForm(blank)} style={{ padding: '8px 18px', background: '#0077cc', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>+ Add Service</button>
       </div>
+      <Tip>The slug is the URL identifier (e.g. "oven-cleaning" creates the booking page at /book/oven-cleaning). Buffer time adds a gap after each booking for travel or cleanup. Don't change slugs once customers have bookmarked them.</Tip>
 
       {services.map(s => (
         <Card key={s._id} style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -511,6 +527,7 @@ function ProvidersSection({ api }) {
         <h2 style={{ color: '#fff', fontSize: '1.3rem' }}>Providers / Staff</h2>
         <button onClick={() => setForm(blank)} style={{ padding: '8px 18px', background: '#0077cc', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>+ Add Provider</button>
       </div>
+      <Tip>Each provider needs at least one service assigned and availability set up, otherwise no time slots will appear on the booking page. Leave the password blank when editing to keep the existing password.</Tip>
 
       {providers.map(p => (
         <Card key={p._id} style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -592,6 +609,7 @@ function AvailabilitySection({ api }) {
   return (
     <div>
       <h2 style={{ color: '#fff', marginBottom: 20, fontSize: '1.3rem' }}>Availability</h2>
+      <Tip>This controls which days and times appear on the booking calendar. Changes save automatically. The booking system offers fixed start times (9:00, 9:30, 12:00, 12:30) — only times that fall within these hours will be shown.</Tip>
       {providers.length === 0 && <p style={{ color: 'rgba(255,255,255,0.4)' }}>Add a provider first.</p>}
 
       {providers.length > 1 && (
@@ -658,6 +676,7 @@ function BlackoutsSection({ api }) {
   return (
     <div>
       <h2 style={{ color: '#fff', marginBottom: 20, fontSize: '1.3rem' }}>Blackout Dates</h2>
+      <Tip>Blackout dates block all bookings across all providers. Use these for bank holidays, company holidays, or any days you're closed. Customers will see these dates greyed out on the calendar.</Tip>
       <Card style={{ marginBottom: 20 }}>
         <SectionTitle>Add Blackout Date</SectionTitle>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -689,6 +708,7 @@ function WhatsAppWidgetSection({ s, setS }) {
   return (
     <Card>
       <SectionTitle>WhatsApp Chat Button</SectionTitle>
+      <Tip>This controls the floating chat button on the website. The number format must be country code + number with no spaces or + sign (e.g. 447455552220). The button uses your Opening Hours to show different messages during and outside business hours.</Tip>
       <Field label="Enable WhatsApp Button"><Toggle checked={wa.enabled} onChange={v => set('enabled', v)} label="Show WhatsApp button on website" /></Field>
       <Field label="WhatsApp Number" helper="Include country code, no +, no spaces. e.g. 447455552220">
         <Input value={wa.number} onChange={e => set('number', e.target.value)} placeholder="447455552220" />
@@ -718,6 +738,7 @@ function PaymentSection({ s, setS }) {
   const setBank   = (k, v) => setS(p => ({ ...p, bankTransfer: { ...p.bankTransfer, [k]: v } }))
   return (
     <div>
+      <Tip>Most small service businesses find bank transfer simpler — no fees and full control. Use Stripe if you want instant automated payment confirmation. Each service can be set individually to use Stripe, Bank Transfer, or no payment.</Tip>
       <Card style={{ marginBottom: 20 }}>
         <SectionTitle>Stripe (Card Payments)</SectionTitle>
         <Field label="Enable Stripe"><Toggle checked={stripe.enabled} onChange={v => setStripe('enabled', v)} label="Accept card payments via Stripe" /></Field>
@@ -747,6 +768,7 @@ function WhatsAppApiSection({ s, setS }) {
   return (
     <Card>
       <SectionTitle>WhatsApp Business API (Reminders)</SectionTitle>
+      <Tip>This sends automatic WhatsApp reminders at 9am the day before each confirmed booking. Twilio is easier to set up for testing; Meta is better for production. Only confirmed bookings receive reminders — make sure you confirm bookings promptly.</Tip>
       <Field label="Enable WhatsApp Reminders"><Toggle checked={cfg.enabled} onChange={v => set('enabled', v)} label="Send WhatsApp appointment reminders via API" /></Field>
       <Field label="Provider">
         <Select value={cfg.provider} onChange={e => set('provider', e.target.value)}>
@@ -794,6 +816,7 @@ function GoogleSection({ s, setS, api }) {
 
   return (
     <div>
+      <Tip>When enabled, confirming a booking creates a calendar event with the client's details. Cancelling removes it. You'll need a Google Cloud project with the Calendar API enabled and OAuth 2.0 credentials. Each provider connects their own calendar below.</Tip>
       <Card style={{ marginBottom: 20 }}>
         <SectionTitle>Google Calendar Configuration</SectionTitle>
         <Field label="Enable Google Calendar"><Toggle checked={cfg.enabled} onChange={v => set('enabled', v)} label="Create calendar events when bookings are confirmed" /></Field>
@@ -832,6 +855,7 @@ function EmailSection({ s, setS }) {
   return (
     <Card>
       <SectionTitle>Email Configuration</SectionTitle>
+      <Tip>For Gmail, use an App Password (not your regular password). Enable 2-Step Verification in your Google Account, then go to Security &gt; App Passwords to generate one. The Admin Email receives booking alerts; the Quote Email receives commercial quote requests.</Tip>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <Field label="From Name"><Input value={cfg.fromName} onChange={e => set('fromName', e.target.value)} /></Field>
         <Field label="From Address"><Input type="email" value={cfg.fromAddress} onChange={e => set('fromAddress', e.target.value)} /></Field>
@@ -862,13 +886,160 @@ function BusinessSection({ s, setS }) {
   )
 }
 
+// ── Help & Guide ─────────────────────────────────────────────────────────────
+function GuideSection() {
+  const section = (title, content) => (
+    <Card style={{ marginBottom: 16 }}>
+      <h3 style={{ color: '#fff', fontSize: '1rem', marginBottom: 12 }}>{title}</h3>
+      <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem', lineHeight: 1.8 }}>{content}</div>
+    </Card>
+  )
+
+  return (
+    <div>
+      <h2 style={{ color: '#fff', marginBottom: 8, fontSize: '1.3rem' }}>Help & Guide</h2>
+      <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 24, fontSize: '0.9rem' }}>Everything you need to know about managing your booking system.</p>
+
+      {section('Getting Started Checklist', (
+        <div>
+          <p style={{ marginBottom: 12 }}>Follow these steps to get your booking system up and running:</p>
+          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <li><strong style={{ color: '#fff' }}>Change the default admin password</strong> — update it in the database for security.</li>
+            <li><strong style={{ color: '#fff' }}>Add your services</strong> — go to Services and create each bookable service with the correct duration, price and deposit settings.</li>
+            <li><strong style={{ color: '#fff' }}>Add at least one provider</strong> — go to Providers, create a staff member and assign your services to them.</li>
+            <li><strong style={{ color: '#fff' }}>Set up availability</strong> — go to Availability and set working hours for your provider. Without this, no time slots will appear.</li>
+            <li><strong style={{ color: '#fff' }}>Configure email</strong> — go to Email Settings and set up SMTP so booking confirmations and alerts are sent.</li>
+            <li><strong style={{ color: '#fff' }}>Add bank transfer details</strong> — go to Payment and enter your bank details (if using bank transfer for deposits).</li>
+            <li><strong style={{ color: '#fff' }}>Set business info and hours</strong> — go to Business Info and Opening Hours.</li>
+            <li><strong style={{ color: '#fff' }}>Add blackout dates</strong> — block any upcoming bank holidays or closures.</li>
+          </ol>
+        </div>
+      ))}
+
+      {section('How the Booking Flow Works', (
+        <div>
+          <p style={{ marginBottom: 12 }}>Here's what happens when a customer makes a booking:</p>
+          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <li>Customer visits the booking page, selects a date and time slot, and fills in their details.</li>
+            <li><strong style={{ color: '#fff' }}>Stripe:</strong> Customer pays the deposit by card immediately. It's marked as paid automatically.</li>
+            <li><strong style={{ color: '#fff' }}>Bank Transfer:</strong> Customer sees your bank details and transfers the deposit manually.</li>
+            <li>You receive an email notification and the booking appears here under <strong style={{ color: '#4db8ff' }}>Bookings</strong>.</li>
+            <li>For bank transfers, click <strong style={{ color: '#fff' }}>"Mark Deposit Received"</strong> once payment arrives, then <strong style={{ color: '#fff' }}>"Confirm Booking"</strong>.</li>
+            <li>Confirmation emails are sent automatically. A Google Calendar event is created if connected.</li>
+            <li>The day before the appointment, a WhatsApp reminder is sent at 9am (if configured).</li>
+            <li>After the job, mark the booking as <strong style={{ color: '#fff' }}>"Completed"</strong>.</li>
+          </ol>
+        </div>
+      ))}
+
+      {section('Daily Workflow', (
+        <div>
+          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <li>Check <strong style={{ color: '#4db8ff' }}>Bookings</strong> — filter by "Pending Confirmation" to see what needs your attention.</li>
+            <li>Check <strong style={{ color: '#4db8ff' }}>Quote Requests</strong> — filter by "New" and respond within 24 hours.</li>
+            <li>Mark completed jobs as "Completed" to keep everything tidy.</li>
+          </ol>
+          <Tip>Bank transfer bookings that stay in "Pending Deposit" for over 24 hours are automatically escalated to "Pending Confirmation" with a note — so you can follow up directly.</Tip>
+        </div>
+      ))}
+
+      {section('Booking Time Slots', (
+        <div>
+          <p style={{ marginBottom: 8 }}>The system uses <strong style={{ color: '#fff' }}>fixed start times: 9:00, 9:30, 12:00, and 12:30</strong>.</p>
+          <p style={{ marginBottom: 8 }}>When a customer selects a date, only slots that fit the service duration within the provider's hours and don't overlap existing bookings are shown.</p>
+          <p>For example, if a 150-minute service is booked at 9:00, the 9:30 slot becomes unavailable (they overlap). This means a <strong style={{ color: '#fff' }}>maximum of 2 bookings per day</strong> — one morning, one afternoon.</p>
+        </div>
+      ))}
+
+      {section('Services Setup', (
+        <div>
+          <p style={{ marginBottom: 8 }}><strong style={{ color: '#fff' }}>Slug</strong> — the URL identifier. "oven-cleaning" creates the page at /book/oven-cleaning. Don't change slugs once customers have bookmarked them.</p>
+          <p style={{ marginBottom: 8 }}><strong style={{ color: '#fff' }}>Duration</strong> — how long the service takes in minutes.</p>
+          <p style={{ marginBottom: 8 }}><strong style={{ color: '#fff' }}>Buffer Time</strong> — gap after each booking before the next slot is available. Use this for travel or cleanup time.</p>
+          <p style={{ marginBottom: 8 }}><strong style={{ color: '#fff' }}>Deposit Mode</strong> — Percentage (e.g. 10% of the price), Fixed amount (e.g. £20), or None.</p>
+          <p><strong style={{ color: '#fff' }}>Payment Method</strong> — Stripe (card), Bank Transfer, or None. Set per service.</p>
+        </div>
+      ))}
+
+      {section('Payment Setup', (
+        <div>
+          <p style={{ fontWeight: 600, color: '#fff', marginBottom: 8 }}>Stripe (Card Payments)</p>
+          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
+            <li>Get your API keys from the <strong style={{ color: '#fff' }}>Stripe Dashboard</strong> → Developers → API Keys.</li>
+            <li>Enter Publishable Key and Secret Key in <strong style={{ color: '#4db8ff' }}>Payment</strong> settings.</li>
+            <li>Set up a webhook in Stripe: endpoint URL is <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: 4 }}>https://yourdomain.com/api/bookings/stripe-webhook</code>, event: payment_intent.succeeded.</li>
+            <li>Add the webhook signing secret to your server .env file as STRIPE_WEBHOOK_SECRET.</li>
+          </ol>
+          <p style={{ fontWeight: 600, color: '#fff', marginBottom: 8 }}>Bank Transfer</p>
+          <p>Enter your account name, sort code, account number and payment instructions. These are shown to customers after booking. You manually mark deposits as received in the Bookings section.</p>
+        </div>
+      ))}
+
+      {section('Google Calendar Setup', (
+        <div>
+          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <li>Create a project in <strong style={{ color: '#fff' }}>Google Cloud Console</strong>.</li>
+            <li>Enable the <strong style={{ color: '#fff' }}>Google Calendar API</strong>.</li>
+            <li>Create <strong style={{ color: '#fff' }}>OAuth 2.0 credentials</strong> (Web application type).</li>
+            <li>Add the redirect URI shown in the Google Calendar settings section.</li>
+            <li>Enter Client ID, Client Secret, and Redirect URI in <strong style={{ color: '#4db8ff' }}>Google Calendar</strong> settings, then save.</li>
+            <li>Click <strong style={{ color: '#fff' }}>"Connect Google Calendar"</strong> for each provider and authorise in the popup.</li>
+          </ol>
+          <Tip>Each provider connects their own Google Calendar. Calendar events include the service name, client name, address and notes.</Tip>
+        </div>
+      ))}
+
+      {section('Email Setup', (
+        <div>
+          <p style={{ marginBottom: 8 }}>Emails are sent for: booking confirmations, booking alerts (to you), confirmed notifications, quote confirmations, and quote alerts.</p>
+          <p style={{ marginBottom: 8 }}>For <strong style={{ color: '#fff' }}>Gmail</strong>: use an App Password, not your regular password. Enable 2-Step Verification first, then go to Google Account → Security → App Passwords.</p>
+          <p>If SMTP settings aren't configured, the system falls back to the Gmail credentials in the server .env file.</p>
+        </div>
+      ))}
+
+      {section('WhatsApp Reminders', (
+        <div>
+          <p style={{ marginBottom: 8 }}>A background job runs at <strong style={{ color: '#fff' }}>9:00am every morning</strong> and sends a WhatsApp reminder to all confirmed bookings for the following day.</p>
+          <p style={{ marginBottom: 8 }}><strong style={{ color: '#fff' }}>Twilio</strong> — easier to set up. Enter Account SID, Auth Token, and WhatsApp-enabled number from your Twilio Console.</p>
+          <p><strong style={{ color: '#fff' }}>Meta</strong> — better for production. Enter your Phone Number ID and Access Token from Meta Business Platform.</p>
+        </div>
+      ))}
+
+      {section('Troubleshooting', (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <strong style={{ color: '#ff6b6b' }}>No time slots showing?</strong>
+            <p>Check that: (1) a provider exists and is active, (2) the provider is assigned to that service, (3) availability is set for that day of the week, (4) the service duration fits within the provider's hours.</p>
+          </div>
+          <div>
+            <strong style={{ color: '#ff6b6b' }}>Emails not sending?</strong>
+            <p>Verify SMTP settings in Email Settings. For Gmail, you must use an App Password with 2-Step Verification enabled. Check your spam folder.</p>
+          </div>
+          <div>
+            <strong style={{ color: '#ff6b6b' }}>Google Calendar not creating events?</strong>
+            <p>Make sure Google Calendar is enabled in settings AND the provider has connected their calendar (green "Connected" badge in Google Calendar section).</p>
+          </div>
+          <div>
+            <strong style={{ color: '#ff6b6b' }}>WhatsApp reminders not sending?</strong>
+            <p>Check that WhatsApp API is enabled, credentials are correct, and the booking status is "Confirmed" (not just "Pending"). Reminders only send for confirmed bookings.</p>
+          </div>
+          <div>
+            <strong style={{ color: '#ff6b6b' }}>Booking stuck on "Pending Deposit"?</strong>
+            <p>For bank transfer bookings, you need to manually click "Mark Deposit Received". After 24 hours, the system auto-escalates it with an admin note so you can follow up.</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function HoursSection({ s, setS }) {
   const hours = s.hours || {}
   const setDay = (day, k, v) => setS(p => ({ ...p, hours: { ...p.hours, [day]: { ...p.hours?.[day], [k]: v } } }))
   return (
     <Card>
       <SectionTitle>Business Opening Hours</SectionTitle>
-      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem', marginBottom: 20 }}>Used to control whether the WhatsApp button shows the "in hours" or "out of hours" message.</p>
+      <Tip>These hours control the WhatsApp widget's in/out-of-hours messages only. Booking availability is managed separately in the Availability section.</Tip>
       {DAYS.map(day => {
         const h = hours[day] || { open: false, from: '09:00', to: '17:00' }
         return (

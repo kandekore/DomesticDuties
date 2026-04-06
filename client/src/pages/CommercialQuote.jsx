@@ -74,7 +74,7 @@ export default function CommercialQuote() {
       {/* Form */}
       <section className="section section-light">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 48, alignItems: 'flex-start' }}>
+          <div className="quote-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 48, alignItems: 'flex-start' }}>
             {status === 'ok' ? (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '48px 0' }}>
                 <div style={{ width: 72, height: 72, borderRadius: '50%', background: '#d4edda', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
@@ -233,7 +233,7 @@ export default function CommercialQuote() {
         </div>
       </section>
 
-      <style>{`@media(max-width:760px){ .quote-grid { grid-template-columns: 1fr !important; } }`}</style>
+      <style>{`@media(max-width:768px){ .quote-grid { grid-template-columns: 1fr !important; gap: 28px !important; } }`}</style>
     </main>
   )
 }
