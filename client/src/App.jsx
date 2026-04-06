@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { SettingsProvider, useSettings } from './context/SettingsContext'
 import Header from './components/Header'
@@ -19,6 +20,10 @@ function Layout() {
   const settings  = useSettings()
   const { pathname } = useLocation()
   const isAdmin   = pathname.startsWith('/admin')
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   if (isAdmin) {
     return (

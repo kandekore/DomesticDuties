@@ -60,10 +60,10 @@ export default function Header() {
 
         {/* CTA */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <a href="tel:07455552220" className="btn btn-outline-white" style={{ padding: '8px 18px', fontSize: '0.85rem' }}>
+          <a href="tel:07455552220" className="btn btn-outline-white header-cta" style={{ padding: '8px 18px', fontSize: '0.85rem' }}>
             <Phone size={15} /> Call Us
           </a>
-          <Link to="/contact-us" className="btn btn-accent" style={{ padding: '8px 18px', fontSize: '0.85rem' }}>
+          <Link to="/contact-us" className="btn btn-accent header-cta" style={{ padding: '8px 18px', fontSize: '0.85rem' }}>
             Get a Quote
           </Link>
           <button
@@ -105,9 +105,10 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 860px) {
+        @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .hamburger-btn { display: block !important; }
+          .header-cta { display: none !important; }
         }
       `}</style>
     </header>

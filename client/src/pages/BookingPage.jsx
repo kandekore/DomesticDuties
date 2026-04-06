@@ -206,7 +206,7 @@ export default function BookingPage() {
           </div>
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: step === STEP_DONE ? '1fr' : '1fr 340px', gap: 32, alignItems: 'flex-start' }}>
+        <div className="booking-layout" style={{ display: 'grid', gridTemplateColumns: step === STEP_DONE ? '1fr' : '1fr 340px', gap: 32, alignItems: 'flex-start' }}>
           {/* ── STEP 1: Date & Time ── */}
           {step === STEP_SELECT_DATE && (
             <div>

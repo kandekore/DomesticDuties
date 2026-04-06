@@ -158,3 +158,22 @@ button { font-family: var(--font-body); }
 
 /* ── Scroll offset for fixed header ────────────────────────────── */
 [id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+/* ── Mobile responsiveness ────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --header-h: 60px; }
+  .container { padding: 0 16px; }
+  .section { padding: 48px 0; }
+  .section-sm { padding: 32px 0; }
+  .hero { padding: 48px 0 56px; }
+  .hero p { font-size: 1rem; margin-bottom: 24px; }
+  .hero-bg-img { width: 100%; opacity: 0.3; }
+  .btn { padding: 10px 22px; font-size: 0.88rem; }
+  .grid-2, .grid-3, .grid-4 { gap: 24px; }
+  .booking-layout { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .section { padding: 36px 0; }
+  .hero { padding: 36px 0 44px; }
+}
