@@ -60,16 +60,23 @@ export default function Home() {
       {/* Stats bar */}
       <section style={{ background: '#fff', borderBottom: '1px solid var(--trim)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', padding: '28px 0' }}>
+          <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', padding: '28px 0' }}>
             {STATS.map(s => (
               <div key={s.label} style={{ textAlign: 'center', padding: '0 16px', borderRight: '1px solid var(--trim)' }}>
-                <div style={{ fontSize: '2rem', fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--accent)' }}>{s.value}</div>
-                <div style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
+                <div className="stats-value" style={{ fontSize: '2rem', fontFamily: 'var(--font-heading)', fontWeight: 800, color: 'var(--accent)' }}>{s.value}</div>
+                <div className="stats-label" style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
-        <style>{`@media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr!important}}`}</style>
+        <style>{`
+          @media(max-width:640px){
+            .stats-grid{grid-template-columns:repeat(4,1fr)!important;gap:0;padding:16px 0!important}
+            .stats-grid>div{padding:0 6px!important}
+            .stats-value{font-size:1.3rem!important}
+            .stats-label{font-size:0.62rem!important;letter-spacing:0.02em!important}
+          }
+        `}</style>
       </section>
 
       {/* Services */}
