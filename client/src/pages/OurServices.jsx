@@ -16,7 +16,7 @@ const SERVICES = [
     icon: '🧹',
     title: 'Carpet & Upholstery Cleaning',
     desc: 'Revitalise your soft furnishings and create a welcoming environment for clients and staff. Our specialist carpet and upholstery cleaning extends the life of your flooring and furniture while removing deep-seated dirt and allergens.',
-    images: ['/assets/images/stairs.jpg', '/assets/images/sofa.jpg'],
+    images: ['/assets/images/carpet-clean.jpg', '/assets/images/sofa.jpg'],
     link: '/book/carpet-upholstery',
     cta: 'Book Carpet Clean',
     pricing: 'From £50 — enquire for sizing and sofa/chair options',
@@ -26,7 +26,7 @@ const SERVICES = [
     icon: '💨',
     title: 'Steam Cleaning',
     desc: 'Perfect for tiles and other hard surfaces, our steam cleaning service delivers a deep clean that removes grime and bacteria without harmful chemicals. Ideal for kitchens, bathrooms and production areas.',
-    images: ['/assets/images/20250806_125145.jpg', '/assets/images/20250813_102302.jpg'],
+    images: ['/assets/images/steam-before.jpg', '/assets/images/steam-after.jpg'],
     link: '/commercial-quote',
     cta: 'Request a Quote',
     pricing: 'Enquire for pricing',
@@ -101,12 +101,12 @@ export default function OurServices() {
               <div style={{ order: i % 2 === 0 ? 1 : 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {s.images.map((img, j) => (
                   <div key={j} style={{ borderRadius: 'var(--radius)', overflow: 'hidden', aspectRatio: '3/4', marginTop: j === 1 ? 32 : 0 }}>
-                    {s.id === 'oven' && (
+                    {(s.id === 'oven' || s.id === 'steam') && (
                       <div style={{ background: j === 0 ? '#e74c3c' : '#27ae60', color: '#fff', fontSize: '0.75rem', fontWeight: 700, textAlign: 'center', padding: '5px 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         {j === 0 ? 'Before' : 'After'}
                       </div>
                     )}
-                    <img src={img} alt={s.id === 'oven' ? (j === 0 ? 'Before cleaning' : 'After cleaning') : s.title} style={{ width: '100%', height: '100%', objectFit: s.id === 'oven' ? 'contain' : 'cover', background: s.id === 'oven' ? '#f5f5f5' : undefined }} />
+                    <img src={img} alt={(s.id === 'oven' || s.id === 'steam') ? (j === 0 ? 'Before cleaning' : 'After cleaning') : s.title} style={{ width: '100%', height: '100%', objectFit: (s.id === 'oven' || s.id === 'steam') ? 'contain' : 'cover', background: (s.id === 'oven' || s.id === 'steam') ? '#f5f5f5' : undefined }} />
                   </div>
                 ))}
               </div>
