@@ -87,7 +87,7 @@ export default function OurServices() {
       {SERVICES.map((s, i) => (
         <section key={s.id} className={`section ${i % 2 === 0 ? '' : 'section-light'}`}>
           <div className="container">
-            <div className="grid-2" style={{ alignItems: 'center', gap: 64, direction: i % 2 === 0 ? 'ltr' : 'ltr' }}>
+            <div className="grid-2 service-row" style={{ alignItems: 'center', gap: 64 }}>
               <div style={{ order: i % 2 === 0 ? 0 : 1 }}>
                 <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>{s.icon}</div>
                 <h2 className="section-title">{s.title}</h2>
@@ -106,7 +106,7 @@ export default function OurServices() {
                         {j === 0 ? 'Before' : 'After'}
                       </div>
                     )}
-                    <img src={img} alt={(s.id === 'oven' || s.id === 'steam') ? (j === 0 ? 'Before cleaning' : 'After cleaning') : s.title} style={{ width: '100%', height: '100%', objectFit: (s.id === 'oven' || s.id === 'steam') ? 'contain' : 'cover', background: (s.id === 'oven' || s.id === 'steam') ? '#f5f5f5' : undefined }} />
+                    <img src={img} alt={(s.id === 'oven' || s.id === 'steam') ? (j === 0 ? 'Before cleaning' : 'After cleaning') : s.title} style={{ width: '100%', height: '100%', objectFit: s.id === 'oven' ? 'contain' : 'cover', background: s.id === 'oven' ? '#f5f5f5' : undefined }} />
                   </div>
                 ))}
               </div>

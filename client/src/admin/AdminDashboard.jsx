@@ -66,8 +66,8 @@ function Field({ label, helper, children }) {
     </div>
   )
 }
-function Card({ children, style }) {
-  return <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 24, ...style }}>{children}</div>
+function Card({ children, style, ...rest }) {
+  return <div {...rest} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 24, ...style }}>{children}</div>
 }
 function SectionTitle({ children }) {
   return <h3 style={{ color: '#fff', marginBottom: 20, fontSize: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: 12 }}>{children}</h3>
@@ -159,7 +159,7 @@ export default function AdminDashboard() {
           <img src="/assets/brand/logowhite300px.png" alt="Logo" style={{ height: 36, marginBottom: 4 }} />
           <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', marginTop: 6 }}>Admin Panel</p>
         </div>
-        <nav style={{ flex: 1, padding: '8px 12px' }}>
+        <nav style={{ flex: 1, padding: '8px 16px' }}>
           {NAV_ITEMS.map(n => (
             <button key={n.id} onClick={() => handleNavClick(n.id)}
               style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 8, border: 'none', background: active === n.id ? 'rgba(0,119,204,0.25)' : 'none', color: active === n.id ? '#4db8ff' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: active === n.id ? 700 : 400, marginBottom: 2, textAlign: 'left' }}>
@@ -218,10 +218,11 @@ export default function AdminDashboard() {
           .admin-topbar { display: flex !important; }
           .admin-sidebar { transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'} !important; top: 0 !important; }
           .admin-overlay { display: block !important; }
-          .admin-main { margin-left: 0 !important; padding: 16px 16px 60px !important; padding-top: 72px !important; }
+          .admin-main { margin-left: 0 !important; padding: 20px 20px 60px !important; padding-top: 72px !important; }
           .admin-main table { font-size: 0.78rem; }
           .admin-main td, .admin-main th { padding: 8px 6px !important; }
           .admin-bookings-grid { grid-template-columns: 1fr !important; }
+          .admin-booking-detail { position: fixed !important; inset: 0 !important; z-index: 1000 !important; max-height: 100vh !important; border-radius: 0 !important; top: 0 !important; overflow-y: auto !important; background: #1a1d24 !important; }
         }
       `}</style>
     </div>
@@ -299,7 +300,7 @@ function BookingsSection({ api }) {
 
         {/* Detail panel */}
         {detail && (
-          <Card style={{ position: 'sticky', top: 20, maxHeight: '90vh', overflowY: 'auto' }}>
+          <Card className="admin-booking-detail" style={{ position: 'sticky', top: 20, maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <strong style={{ color: '#fff' }}>Booking Detail</strong>
               <button onClick={() => { setSelected(null); setDetail(null) }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', fontSize: '1.2rem' }}>✕</button>

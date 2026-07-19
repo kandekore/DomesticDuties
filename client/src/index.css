@@ -124,7 +124,11 @@ button { font-family: var(--font-body); }
 .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
 @media (max-width: 960px) { .grid-3,.grid-4 { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 640px) { .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
+  .grid-2.service-row > *:first-child { order: 0 !important; }
+  .grid-2.service-row > *:last-child  { order: 1 !important; }
+}
 
 /* ── Forms ─────────────────────────────────────────────────────── */
 .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
