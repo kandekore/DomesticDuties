@@ -1,6 +1,11 @@
 import { google } from 'googleapis'
 
 function getOAuthClient(settings) {
+  // KSPS staging guard: neutralise all Google Calendar access from staging.
+  // Returning null makes getAuthUrl / exchangeCode / create+delete events all no-op,
+  // so staging never touches the business's real calendar with migrated OAuth tokens.
+  if (process.env.DISABLE_GOOGLE === 'true') return null
+
   const cfg = settings?.google
   if (!cfg?.clientId || !cfg?.clientSecret) return null
   return new google.auth.OAuth2(cfg.clientId, cfg.clientSecret, cfg.redirectUri)

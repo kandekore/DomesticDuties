@@ -23,6 +23,10 @@ async function getTransporter() {
 }
 
 export async function sendMail({ to, subject, html, attachments }) {
+  // KSPS staging guard: never send real email from staging.
+  // The migrated DB holds live SMTP credentials, so config presence alone is not safe.
+  if (process.env.DISABLE_EMAIL === 'true') return { disabled: true }
+
   const s = await Settings.findOne({ singleton: 'main' })
   const cfg = s?.email || {}
   const from = `"${cfg.fromName || 'Domestic Duties'}" <${cfg.fromAddress || process.env.GMAIL_USER}>`

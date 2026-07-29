@@ -44,7 +44,10 @@ router.post('/', async (req, res) => {
     let stripeClientSecret = null
     let stripePaymentIntentId = null
 
-    if (paymentMethod === 'stripe' && settings?.stripe?.enabled && settings.stripe.secretKey) {
+    // KSPS staging guard: never create a real Stripe PaymentIntent from staging.
+    // The migrated DB holds the live Stripe secret key, so `enabled` alone is not safe.
+    const paymentsDisabled = process.env.DISABLE_PAYMENTS === 'true'
+    if (!paymentsDisabled && paymentMethod === 'stripe' && settings?.stripe?.enabled && settings.stripe.secretKey) {
       const stripe = new Stripe(settings.stripe.secretKey)
       const intent = await stripe.paymentIntents.create({
         amount: Math.round(depositAmount * 100),

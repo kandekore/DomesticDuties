@@ -2,6 +2,10 @@ import Settings from '../models/Settings.js'
 
 // Send a WhatsApp message via Twilio or Meta Business API
 export async function sendWhatsApp(to, message) {
+  // KSPS staging guard: never send real WhatsApp messages from staging.
+  // The migrated DB holds live Twilio/Meta credentials, so `enabled` alone is not safe.
+  if (process.env.DISABLE_WHATSAPP === 'true') return
+
   const s = await Settings.findOne({ singleton: 'main' })
   const cfg = s?.whatsappApi
   if (!cfg?.enabled) return
